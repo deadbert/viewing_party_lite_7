@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   end
 
   def create
+    params[:email] = params[:email].downcase
     user = User.new(user_params)
     if user.save
       redirect_to user_path(user)
@@ -21,6 +22,7 @@ class UsersController < ApplicationController
   end
 
   def login
+    params[:email] = params[:email].downcase
     user = User.find_by(email: params[:email])
     if user.authenticate(params[:password])
       redirect_to user_path(user)
