@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   get "/", to: "welcome#index"
   # resources :welcome, only: [:index]
 
+  get "/login", to: "users#login_form"
+  post "/login", to: "users#login"
   get "/register", to: "users#new", as: :register
   resources :users, only: [:create, :show] do 
     get "/discover" => "search#index"

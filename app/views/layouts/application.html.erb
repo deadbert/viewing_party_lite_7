@@ -11,8 +11,8 @@
   </head>
 
   <body>
-    <% flash.each do |type, msg| %>
-      <div><%= msg %></div>
+    <% flash.each do |name, msg| %>
+      <%= content_tag :div, msg, class: name %>
     <% end %>
     <%= render partial: "shared/title-bar" %>
     <%= yield %>

@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe "Movie Results Page" do
   before(:each) do
-    @sally = User.create!(name: "Sally", email: "bettercallsal@gmail.com")
-    @alex = User.create!(name: "Alex", email: "alexthegreat@gmail.com")
+    @sally = User.create!(name: "Sally", email: "bettercallsal@gmail.com", password: "123456", password_confirmation: "123456")
+    @alex = User.create!(name: "Alex", email: "alexthegreat@gmail.com", password: "123456", password_confirmation: "123456")
     @party1 = Party.create!(movie: 1, movie_title: "Bar Wars", party_date: "2023-10-11T14:43")
     UserParty.create!(user_id: @sally.id, party_id: @party1.id, host: true)
   end
@@ -35,7 +35,7 @@ RSpec.describe "Movie Results Page" do
 
       expect(current_path).to eq("/users/#{@sally.id}/movies")
       expect(page).to have_content("Barbie")
-      expect(page).to have_content("Vote Average: 7.252")
+      expect(page).to have_content("Vote Average: 7.233")
       expect(page).to have_content("El bar")
       expect(page).to have_content("Vote Average: 6.31")
       expect(page).to have_content("Barbarella")

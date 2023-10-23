@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     if user.save
       redirect_to user_path(user)
     else
-      flash[:alert] = "Unable to register. Please use a unique email address."
+      flash[:alert] = user.error_message
       render "new"
     end
   end
@@ -17,9 +17,22 @@ class UsersController < ApplicationController
     @parties = @user.parties
   end
 
+  def login_form
+  end
+
+  def login
+    user = User.find_by(email: params[:email])
+    if user.authenticate(params[:password])
+      redirect_to user_path(user)
+    else
+      flash[:alert] = "Incorrect email or Password"
+      render :login_form
+    end
+  end
+
   private
 
   def user_params
-    params.permit(:name, :email)
+    params.permit(:name, :email, :password, :password_confirmation)
   end
 end
