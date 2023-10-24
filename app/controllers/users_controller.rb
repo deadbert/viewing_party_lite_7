@@ -15,8 +15,13 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
-    @parties = @user.parties
+    if session[:user_id]
+      @user = User.find(params[:id])
+      @parties = @user.parties
+    else
+      flash[:alert] = "You must log in to view the dashboard"
+      redirect_to "/"
+    end
   end
 
   def login_form

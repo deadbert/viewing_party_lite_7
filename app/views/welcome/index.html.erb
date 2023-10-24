@@ -1,10 +1,10 @@
 <% if session[:user_id] %>
   <%= link_to "Log Out", "/logout" %>
+  <h3>Existing Users:</h3>
+  <% @users.each do |user| %>
+    <li><%= user.email %></li>
+  <% end %>
 <% else %>
   <%= button_to "Create a New User", register_path, method: :get, data: { turbo: false } %> 
   <%= link_to "Log In", login_path %>
-<% end %>
-<h3>Existing Users:</h3>
-<% @users.each do |user| %>
-  <li><%= user.email %></li>
 <% end %>

@@ -8,7 +8,7 @@ RSpec.describe 'User Show Page', type: :feature do
     UserParty.create!(user_id: @sally.id, party_id: @party1.id, host: true)
   end
 
-  describe "As a user when I visit /users/:id" do
+  describe "As a logged in user when I visit /users/:id" do
     it "I see '<user name>'s Dashboard" do
       visit user_path(@sally)
 
@@ -38,6 +38,18 @@ RSpec.describe 'User Show Page', type: :feature do
 
         click_on "Discover Movies"
         expect(current_path).to eq("#{user_path(@sally)}/discover")
+      end
+    end
+  end
+
+  describe "As a visitor" do
+    describe "If I try to visit a user show page or dashboard" do
+      it "I remain on the landing page and I see a message that I must log in" do
+        
+        visit "/users/#{@sally.id}"
+
+        expect(current_path).to eq("/")
+        expect(page).to have_content("You must log in to view the dashboard")
       end
     end
   end

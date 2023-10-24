@@ -14,15 +14,15 @@ RSpec.describe "Welcome Page", type: :feature do
       expect(page).to have_button("Create a New User")
     end
     
-    it "A list of existing users, which links to a user dashboard" do 
+    it "I do not see a list of existing users, which links to a user dashboard" do 
       sally = User.create!(name: "Sally", email: "bettercallsal@gmail.com", password: "123456", password_confirmation: "123456")
       alex = User.create!(name: "Alex", email: "alexthegreat@gmail.com", password: "123456", password_confirmation: "123456")
 
       visit "/"
 
-      expect(page).to have_content("Existing Users")
-      expect(page).to have_content(sally.email)
-      expect(page).to have_content(alex.email)
+      expect(page).to_not have_content("Existing Users")
+      expect(page).to_not have_content(sally.email)
+      expect(page).to_not have_content(alex.email)
     end
     
     it "A link back to the welcome page" do 
@@ -33,26 +33,45 @@ RSpec.describe "Welcome Page", type: :feature do
       click_on "Home"
       expect(current_path).to eq("/")
     end
+  end
 
-    it "If I'm logged in I no longer see a Log In or create account link
-  instead I see a Log Out button that when clicked logs out and routes to root path" do
-    wayne = User.create!(name: "Wayne", email: "partytime@gmail.com", password: "123456", password_confirmation: "123456")
+  describe "As a registered user" do
+    it "I see a Log Out button that when clicked logs out and routes to root path" do
+      wayne = User.create!(name: "Wayne", email: "partytime@gmail.com", password: "123456", password_confirmation: "123456")
+  
+      visit login_path
+  
+      fill_in :email, with: "partytime@gmail.com"
+      fill_in :password, with: "123456"
+      click_on "Log In"
+  
+      visit "/"
+  
+      expect(page).to have_link("Log Out")
+      expect(page).to_not have_link("Log In")
+  
+      click_on "Log Out"
+  
+      expect(page).to have_link("Log In")
+      expect(page).to_not have_link("Log Out")
+    end
 
-    visit login_path
+    it "I see a list of existing users" do
+      sally = User.create!(name: "Sally", email: "bettercallsal@gmail.com", password: "123456", password_confirmation: "123456")
+      alex = User.create!(name: "Alex", email: "alexthegreat@gmail.com", password: "123456", password_confirmation: "123456")
+      wayne = User.create!(name: "Wayne", email: "partytime@gmail.com", password: "123456", password_confirmation: "123456")
+  
+      visit login_path
+  
+      fill_in :email, with: "partytime@gmail.com"
+      fill_in :password, with: "123456"
+      click_on "Log In"
 
-    fill_in :email, with: "partytime@gmail.com"
-    fill_in :password, with: "123456"
-    click_on "Log In"
+      visit "/"
 
-    visit "/"
-
-    expect(page).to have_link("Log Out")
-    expect(page).to_not have_link("Log In")
-
-    click_on "Log Out"
-
-    expect(page).to have_link("Log In")
-    expect(page).to_not have_link("Log Out")
+      expect(page).to have_content("Existing Users")
+      expect(page).to have_content(sally.email)
+      expect(page).to have_content(alex.email)
     end
   end
 end
