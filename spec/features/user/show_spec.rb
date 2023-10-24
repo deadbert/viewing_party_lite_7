@@ -10,18 +10,30 @@ RSpec.describe 'User Show Page', type: :feature do
 
   describe "As a logged in user when I visit /users/:id" do
     it "I see '<user name>'s Dashboard" do
+      visit login_path
+      fill_in :email, with: @sally.email
+      fill_in :password, with: "123456"
+      click_on "Log In"
       visit user_path(@sally)
 
       expect(page).to have_content("Sally's Dashboard")
     end
 
     it "I see a button to discover movies" do
+      visit login_path
+      fill_in :email, with: @sally.email
+      fill_in :password, with: "123456"
+      click_on "Log In"
       visit user_path(@sally)
 
       expect(page).to have_button("Discover Movies")
     end
 
     it "I see a section that lists viewing parties" do
+      visit login_path
+      fill_in :email, with: @sally.email
+      fill_in :password, with: "123456"
+      click_on "Log In"
       visit user_path(@sally)
 
       within(".viewing_parties") do
@@ -34,6 +46,10 @@ RSpec.describe 'User Show Page', type: :feature do
 
     describe "When I click 'Discover Movies' button" do
       it "I am redirected to discover page '/users/:id/discover'" do
+        visit login_path
+        fill_in :email, with: @sally.email
+        fill_in :password, with: "123456"
+        click_on "Log In"
         visit user_path(@sally)
 
         click_on "Discover Movies"

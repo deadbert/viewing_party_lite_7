@@ -12,7 +12,11 @@ RSpec.describe "Create new Viewing Party page", type: :feature do
       it "I should see the name of the movie title and a form
       with the fields duration of party, data of party, start time
       checkboxes next to users in the system, button to submit" do
-        
+        visit login_path
+        fill_in :email, with: @sally.email
+        fill_in :password, with: "123456"
+        click_on "Log In"
+
         visit "/users/#{@sally.id}/movies/238/new"
 
         within(".party_form") do
@@ -26,7 +30,10 @@ RSpec.describe "Create new Viewing Party page", type: :feature do
 
       it "When I click submit a new party is created, and I am redirected
       back to the users dashboard where I see the new party" do
-
+        visit login_path
+        fill_in :email, with: @sally.email
+        fill_in :password, with: "123456"
+        click_on "Log In"
         visit "/users/#{@sally.id}/movies/238/new"
 
         # Sad Path Test
