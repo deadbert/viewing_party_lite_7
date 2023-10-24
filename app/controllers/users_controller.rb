@@ -6,6 +6,7 @@ class UsersController < ApplicationController
     params[:email] = params[:email].downcase
     user = User.new(user_params)
     if user.save
+      session[:user_id] = user.id
       redirect_to user_path(user)
     else
       flash[:alert] = user.error_message
@@ -25,11 +26,17 @@ class UsersController < ApplicationController
     params[:email] = params[:email].downcase
     user = User.find_by(email: params[:email])
     if user.authenticate(params[:password])
+      session[:user_id] = user.id
       redirect_to user_path(user)
     else
       flash[:alert] = "Incorrect email or Password"
       render :login_form
     end
+  end
+
+  def logout
+    reset_session
+    redirect_to "/"
   end
 
   private

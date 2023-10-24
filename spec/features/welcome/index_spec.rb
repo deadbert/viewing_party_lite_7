@@ -33,5 +33,26 @@ RSpec.describe "Welcome Page", type: :feature do
       click_on "Home"
       expect(current_path).to eq("/")
     end
+
+    it "If I'm logged in I no longer see a Log In or create account link
+  instead I see a Log Out button that when clicked logs out and routes to root path" do
+    wayne = User.create!(name: "Wayne", email: "partytime@gmail.com", password: "123456", password_confirmation: "123456")
+
+    visit login_path
+
+    fill_in :email, with: "partytime@gmail.com"
+    fill_in :password, with: "123456"
+    click_on "Log In"
+
+    visit "/"
+
+    expect(page).to have_link("Log Out")
+    expect(page).to_not have_link("Log In")
+
+    click_on "Log Out"
+
+    expect(page).to have_link("Log In")
+    expect(page).to_not have_link("Log Out")
+    end
   end
 end
