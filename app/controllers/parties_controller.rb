@@ -1,4 +1,6 @@
 class PartiesController < ApplicationController
+  before_action :require_login
+
   def new
     @user = User.find(params[:user_id])
     @movie = SearchFacade.new.find_movie(params[:id])
@@ -28,6 +30,13 @@ class PartiesController < ApplicationController
       if value == "1"
         UserParty.create!(user_id: key.to_i, party_id: party.id, host: false)
       end
+    end
+  end
+
+  def require_login
+    if session[:user_id] == nil
+      flash[:error] = "You must log in to access this resource"
+      redirect_to "/users/#{params[:user_id]}/movies/#{params[:movie_id]}"
     end
   end
 end

@@ -3,7 +3,7 @@ require 'rails_helper'
 # frozen_string_literal: true
 
 RSpec.describe "Movie Details Page" do
-  describe "When I visit a movie's detail page" do
+  describe "While logged in when I visit a movie's detail page" do
     before(:each) do
       @sally = User.create!(name: "Sally", email: "bettercallsal@gmail.com", password: "123456", password_confirmation: "123456")
       @alex = User.create!(name: "Alex", email: "alexthegreat@gmail.com", password: "123456", password_confirmation: "123456")
@@ -13,6 +13,11 @@ RSpec.describe "Movie Details Page" do
 
     describe "Details Page", :vcr do
       it "I should see a button to create a viewing party, and a button to go back to the discover page" do
+        visit login_path
+        fill_in :email, with: @sally.email
+        fill_in :password, with: "123456"
+        click_on "Log In"
+
         visit "/users/#{@sally.id}/movies/238" # need to find a way to access the id of movies without hardcoding them
 
         expect(page).to have_button("Create a Viewing Party")
